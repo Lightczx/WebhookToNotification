@@ -4,10 +4,10 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace WebhookToNotification.Services.Interop;
 
-[GeneratedComInterface]
+[ComImport]
 [Guid("886D8EEB-8CF2-4446-8D02-CDBA1DBDCF99")]
 [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-public partial interface IPropertyStore
+public interface IPropertyStore
 {
     void GetCount(out uint count);
 

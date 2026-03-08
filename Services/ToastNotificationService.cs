@@ -11,14 +11,14 @@ namespace WebhookToNotification.Services;
 
 public partial class ToastNotificationService
 {
-    private const string APP_ID = "WebhookToNotification.App";
+    private const string AppId = "WebhookToNotification.App";
 
     public ToastNotificationService()
     {
         RegisterAppForNotifications();
     }
 
-    private void RegisterAppForNotifications()
+    private static void RegisterAppForNotifications()
     {
         try
         {
@@ -30,8 +30,8 @@ public partial class ToastNotificationService
             }
 
             // 注册 AppUserModelID 到注册表
-            string regPath = $@"Software\Classes\AppUserModelId\{APP_ID}";
-            using (RegistryKey? key = Registry.CurrentUser.CreateSubKey(regPath))
+            const string RegistryPath = $@"Software\Classes\AppUserModelId\{AppId}";
+            using (RegistryKey? key = Registry.CurrentUser.CreateSubKey(RegistryPath))
             {
                 if (key is not null)
                 {
@@ -49,7 +49,7 @@ public partial class ToastNotificationService
         }
     }
 
-    private void CreateStartMenuShortcut(string exePath)
+    private static void CreateStartMenuShortcut(string exePath)
     {
         try
         {
@@ -62,10 +62,9 @@ public partial class ToastNotificationService
             shellLink.SetWorkingDirectory(Path.GetDirectoryName(exePath) ?? "");
             shellLink.SetDescription("Webhook Notification");
 
-            // 设置 AppUserModelID
             IPropertyStore propertyStore = (IPropertyStore)shellLink;
             PropertyKey appIdKey = new(new Guid("9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3"), 5);
-            PropVariant appIdValue = new(APP_ID);
+            PropVariant appIdValue = new(AppId);
             propertyStore.SetValue(ref appIdKey, ref appIdValue);
             propertyStore.Commit();
 
@@ -84,7 +83,6 @@ public partial class ToastNotificationService
     {
         try
         {
-            // 获取图片的绝对路径
             string iconPath = Path.Combine(AppContext.BaseDirectory, "Icon.png");
             string toastXml = $"""
                 <toast>
@@ -103,7 +101,7 @@ public partial class ToastNotificationService
             xmlDoc.LoadXml(toastXml);
 
             ToastNotification toast = new(xmlDoc);
-            ToastNotifier notifier = ToastNotificationManager.CreateToastNotifier(APP_ID);
+            ToastNotifier notifier = ToastNotificationManager.CreateToastNotifier(AppId);
             notifier.Show(toast);
         }
         catch (Exception ex)

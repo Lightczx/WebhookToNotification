@@ -4,10 +4,10 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace WebhookToNotification.Services.Interop;
 
-[GeneratedComInterface]
+[ComImport]
 [Guid("0000010B-0000-0000-C000-000000000046")]
 [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-public partial interface IPersistFile
+public interface IPersistFile
 {
     void GetClassID(out Guid pClassID);
 
